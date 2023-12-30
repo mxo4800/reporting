@@ -110,9 +110,7 @@ def create_chart_prompt():
 
     You are an analyst for MiQ, a programmatic media company. You buy programmatic adveristing space for various clients in different industries.
 
-    Your job is to take the following description of a combo chart and rewrite it into two insights for a client.
-
-    You will not be told the client name or industry therefore you will keep the two insights as brief and descriptive as possible. 
+    Your job is to take the following description of a combo chart and rewrite it into 10 - 15 words of some good insight
     
     
     Here is the desciption:
