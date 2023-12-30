@@ -3,6 +3,7 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 from matplotlib.offsetbox import OffsetImage, AnnotationBbox
+import streamlit as st
 
 def delta(data, start_date, end_date):
 
@@ -241,9 +242,9 @@ def vcr_chart(months):
 
 
     # Show the plot
-    plt.tight_layout()
+    # plt.tight_layout()
 
-    plt.show()
+    st.pyplot(fig)  # Display the Matplotlib figure in Streamlit
 
 def cpa_chart(months):
 
@@ -289,8 +290,8 @@ def cpa_chart(months):
     # plt.savefig('cpa.png', dpi=300, bbox_inches='tight')
 
     # Show the plot
-    plt.tight_layout()
-    plt.show()
+    # plt.tight_layout()
+    st.pyplot(fig)  # Display the Matplotlib figure in Streamlit
 
 
 
