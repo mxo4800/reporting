@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
-from ai import run_grammar_chain, run_rewrite_chain
-from delta_dental import delta, chart, cpa_chart, vcr_chart
+from ai import run_grammar_chain, run_rewrite_chain, run_chart_chain
+from delta_dental import delta, chart, cpa_chart, vcr_chart, describe_chart
 
 # Sidebar
 uploaded_file = st.sidebar.file_uploader("Upload a CSV file", type=["csv"])
@@ -26,7 +26,7 @@ if uploaded_file is not None:
 
     if create_report:
 
-        best_performing, ctr_average, vcr_average, cpa_average = delta(data, start_date, end_date)
+        best_performing, ctr_average, vcr_average, cpa_average, total_impressions = delta(data, start_date, end_date)
         
         df = pd.DataFrame(best_performing)
         
@@ -55,7 +55,7 @@ if uploaded_file is not None:
                 variable = row["Variable"]
                 description = row["Description"]
                 kpi_value = row["KPI_Value"]
-                format = ["Format"]
+                format = row["Format"]
 
                 if kpi == "CTR":
 
@@ -101,12 +101,25 @@ if uploaded_file is not None:
                 return rewrite_report
 
             with st.spinner(text='In progress...'):
+                                
+                months = chart(data)
+                
+                # Display the result
+                st.write("A.I Report:")
+                st.write(f"From {start_date} to {end_date}, MiQ has delievered a total of {total_impressions} impressions with a CTR of {ctr_average}, a CPA of {cpa_average}, and a VCR of {vcr_average} for the {client_name} campaign.")
+                
+                vcr_chart(months)
+                vcr_lines = describe_chart(months, chart="OLV")
+                vcr_desc = run_chart_chain(vcr_lines)
+                st.write(vcr_desc)
+                
+                cpa_chart(months)
+                cpa_lines = describe_chart(months, chart="Display")
+                cpa_desc = run_chart_chain(cpa_lines)
+                st.write(cpa_desc)
+                
+                st. write("Insights: ")
                 new_report = run_report()
+                st.write(new_report)
 
-            # Display the result
-            st.write("A.I Report:")
-            st.write(new_report)
 
-            months = chart(data)
-            vcr_chart(months)
-            cpa_chart(months)

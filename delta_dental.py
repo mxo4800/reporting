@@ -14,6 +14,7 @@ def delta(data, start_date, end_date):
 
     values = ["Request a Quote Fires", "Impressions", "Clicks", "Media Cost", "Video Plays", "Video Completions"]
 
+    total_impressions = data.Impressions.sum()
     ctr_average = data.Clicks.sum() / data.Impressions.sum()
     cpa_average = data["Media Cost"].sum() / data["Request a Quote Fires"].sum()
     vcr_average = data["Video Completions"].sum() / data["Video Plays"].sum()
@@ -177,7 +178,7 @@ def delta(data, start_date, end_date):
         best_performing["Format"].append("OLV")
 
 
-    return best_performing, ctr_average, cpa_average, vcr_average
+    return best_performing, ctr_average, cpa_average, vcr_average, total_impressions
 
 
 def chart(data):
@@ -198,6 +199,40 @@ def chart(data):
     months = months.sort_values(by="Month_Number", ascending=True)
 
     return months
+
+def describe_chart(months, chart="Display"):
+
+    if chart == "Display":
+
+        line = "You are being describe a line and bar chart combo. The line is CPA (cost per acquistion) over a certain amount of months. The bars are the total spend over a certain amount of months. Here is the description: "
+        
+
+        for index, row in months.iterrows():
+            
+            month = row["Month"]
+            cpa = row["CPA"]
+            cost = row["Media Cost"]
+
+            line += f"The average cpa for the month of {month} (x-axis) is {cpa} (line) with a total spend of {cost} (bar)."
+    
+    elif chart == "OLV":
+        
+        line = "You are being describe a line and bar chart combo. The line is VCR (video completion rate) over a certain amount of months. The bars are the total spend of a certain amount of months. Here is the description: "
+
+
+        for index, row in months.iterrows():
+
+            month = row["Month"]
+            vcr = row["VCR"]
+            cost = row["Media Cost"]
+
+            line += f"The average vcr for the month of {month} (x-axis) is {vcr} (line) with a total spend of {cost} (bar)"
+
+    return line
+
+
+
+
 
 def vcr_chart(months):
 

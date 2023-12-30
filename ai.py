@@ -102,3 +102,38 @@ def run_rewrite_chain(report, llm=llm):
     rewritten_report = rewrite_chain.run(report)
 
     return rewritten_report
+
+
+def create_chart_prompt():
+
+    template = """
+    
+    Listen to the following task:
+
+    {task}
+    
+    
+    """
+
+    prompt_template = PromptTemplate(
+        input_variables=["task"], template=template)
+
+    return prompt_template
+
+def create_chart_chain(llm=llm):
+
+    prompt_template = create_chart_prompt()
+
+    chart_chain = LLMChain(llm=llm, prompt=prompt_template)
+
+    return chart_chain
+
+def run_chart_chain(task, llm=llm):
+
+    chart_chain = create_chart_chain(llm=llm)
+
+    chart_report = chart_chain.run(task)
+
+    return chart_report
+
+
