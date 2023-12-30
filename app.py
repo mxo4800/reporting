@@ -1,18 +1,18 @@
 import streamlit as st
 import pandas as pd
 from ai import run_grammar_chain, run_rewrite_chain
-from delta_dental import delta
+from delta_dental import delta, chart, cpa_chart, vcr_chart
 
 # Sidebar
 uploaded_file = st.sidebar.file_uploader("Upload a CSV file", type=["csv"])
 
 if uploaded_file is not None:
     # Read the uploaded CSV file
-    df = pd.read_csv(uploaded_file)
+    data = pd.read_csv(uploaded_file)
 
     # Display the data
     st.write("Original Data:")
-    st.write(df)
+    st.write(data)
 
     client_name = st.text_input("Client Name:", "Delta Dental")
     industry_type = st.text_input("Industry Type:", "dental insurance plans")
@@ -26,7 +26,7 @@ if uploaded_file is not None:
 
     if create_report:
 
-        best_performing, ctr_average, vcr_average, cpa_average = delta(df, start_date, end_date)
+        best_performing, ctr_average, vcr_average, cpa_average = delta(data, start_date, end_date)
         
         df = pd.DataFrame(best_performing)
         
@@ -106,3 +106,7 @@ if uploaded_file is not None:
             # Display the result
             st.write("A.I Report:")
             st.write(new_report)
+
+            months = chart(data)
+            vcr_chart(months)
+            cpa_chart(months)

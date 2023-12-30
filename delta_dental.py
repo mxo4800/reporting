@@ -1,4 +1,8 @@
 import pandas as pd
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+from matplotlib.offsetbox import OffsetImage, AnnotationBbox
 
 def delta(data, start_date, end_date):
 
@@ -173,5 +177,120 @@ def delta(data, start_date, end_date):
 
 
     return best_performing, ctr_average, cpa_average, vcr_average
+
+
+def chart(data):
+
+    data["Date"] = pd.to_datetime(data["Date"])
+    data = data.sort_values(by="Date")
+
+    data['Month'] = data['Date'].dt.strftime('%B')
+    data["Month_Number"] = data["Date"].dt.month
+
+
+    months = data.pivot_table(index=["Month", "Month_Number"], values=["Media Cost", "Impressions", "Video Plays", "Video Completions", "Request a Quote Fires"], aggfunc="sum")
+    print(months)
+    months["VCR"] = months["Video Completions"] / months["Video Plays"]
+    months["CPA"] = months["Media Cost"] / months["Request a Quote Fires"]
+    
+    months = months.reset_index()
+    months = months.sort_values(by="Month_Number", ascending=True)
+
+    return months
+
+def vcr_chart(months):
+
+    fig, ax1 = plt.subplots(figsize=(20, 8))
+
+    # Create a line plot for CPA on the primary y-axis with purple color
+    sns.lineplot(x='Month', y='VCR', data=months, ax=ax1, marker='o', label='VCR', color='purple')
+    ax1.set_xlabel('Month')
+    ax1.set_ylabel('VCR', color='purple')  # Add dollar sign to the y-axis label
+    ax1.tick_params(axis='y', labelcolor='purple')
+
+    # Create a bar plot for Cost on the secondary y-axis
+    ax2 = ax1.twinx()
+    ax2.bar(months['Month'], months['Media Cost'], alpha=0.5, color='tab:orange', label='Cost')
+    ax2.set_ylabel('Cost', color='tab:orange')
+    ax2.tick_params(axis='y', labelcolor='tab:orange')
+
+    # Rotate x-axis labels for both axes
+    ax1.set_xticklabels(months['Month'], rotation=45)
+    ax2.set_xticklabels(months['Month'], rotation=45)
+
+    # Annotate the line graph with CPA values including a dollar sign
+    for index, row in months.iterrows():
+        ax1.text(row['Month'], row['VCR'], f'{row["VCR"] * 100:.2f}%', ha='center', va='bottom', fontsize=8, color='purple')
+
+    # Set labels and title
+    plt.title('Monthly Cost vs VCR Performance', fontsize=20, pad=20)
+    plt.legend(loc='center left')
+
+    fig.patch.set_facecolor('white')
+
+
+    # # Add the company logo
+    # logo_path = "MiQ-logo-Copy1 (3).jpg"  # Replace with the actual path to your logo image
+    # logo_img = plt.imread(logo_path)
+    # imagebox = OffsetImage(logo_img, zoom=0.1)  # Adjust the zoom factor as needed
+    # ab = AnnotationBbox(imagebox, (0.1, 0.9), frameon=False, pad=0.0, xycoords='axes fraction', boxcoords="axes fraction")
+    # plt.gca().add_artist(ab)
+
+    # plt.savefig('vcr.png', dpi=300, bbox_inches='tight')
+
+
+
+    # Show the plot
+    plt.tight_layout()
+
+    plt.show()
+
+def cpa_chart(months):
+
+    # Assuming you have your data in a DataFrame named grouped_df
+    # If not, you can create one like this:
+    # grouped_df = pd.DataFrame({'Date': date_list, 'CPA': cpa_list, 'Cost': cost_list})
+
+    # Create a figure and axis
+    fig, ax1 = plt.subplots(figsize=(20, 8))
+
+    # Create a line plot for CPA on the primary y-axis with purple color
+    sns.lineplot(x='Month', y='CPA', data=months, ax=ax1, marker='o', label='CPA', color='purple')
+    ax1.set_xlabel('Months')
+    ax1.set_ylabel('CPA ($)', color='purple')  # Add dollar sign to the y-axis label
+    ax1.tick_params(axis='y', labelcolor='purple')
+
+    # Create a bar plot for Cost on the secondary y-axis
+    ax2 = ax1.twinx()
+    ax2.bar(months['Month'], months['Media Cost'], alpha=0.5, color='tab:orange', label='Cost')
+    ax2.set_ylabel('Cost', color='tab:orange')
+    ax2.tick_params(axis='y', labelcolor='tab:orange')
+
+    # Rotate x-axis labels for both axes
+    ax1.set_xticklabels(months['Month'], rotation=45)
+    ax2.set_xticklabels(months['Month'], rotation=45)
+
+    # Annotate the line graph with CPA values including a dollar sign
+    for index, row in months.iterrows():
+        ax1.text(row['Month'], row['CPA'], f'${row["CPA"]:.2f}', ha='center', va='bottom', fontsize=8, color='purple')
+
+    # Set labels and title
+    plt.title('Monthly Cost vs CPA Performance', fontsize=20, pad=20)
+    plt.legend(loc='upper left')
+
+
+    # # Add the company logo
+    # logo_path = "MiQ-logo-Copy1 (3).jpg"  # Replace with the actual path to your logo image
+    # logo_img = plt.imread(logo_path)
+    # imagebox = OffsetImage(logo_img, zoom=0.1)  # Adjust the zoom factor as needed
+    # ab = AnnotationBbox(imagebox, (0.05, 0.8), frameon=False, pad=0.0, xycoords='axes fraction', boxcoords="axes fraction")
+    # plt.gca().add_artist(ab)
+
+    # plt.savefig('cpa.png', dpi=300, bbox_inches='tight')
+
+    # Show the plot
+    plt.tight_layout()
+    plt.show()
+
 
 
