@@ -107,10 +107,17 @@ def run_rewrite_chain(report, llm=llm):
 def create_chart_prompt():
 
     template = """
-    
-    Listen to the following task:
 
-    {task}
+    You are an analyst for MiQ, a programmatic media company. You buy programmatic adveristing space for various clients in different industries.
+
+    Your job is to take the following description of a combo chart and rewrite it into two insights for a client.
+
+    You will not be told the client name or industry therefore you will keep the two insights as brief and descriptive as possible. 
+    
+    
+    Here is the desciption:
+    
+    {desc}
     
     
     """

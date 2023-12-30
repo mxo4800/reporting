@@ -204,7 +204,7 @@ def describe_chart(months, chart="Display"):
 
     if chart == "Display":
 
-        line = "You are being describe a line and bar chart combo. The line is CPA (cost per acquistion) over a certain amount of months. The bars are the total spend over a certain amount of months. Here is the description: "
+        line = "You are being describe a line and bar chart combo. The line is CPA (cost per acquistion) over a certain amount of months. The bars are the total spend over a certain amount of months."
         
 
         for index, row in months.iterrows():
@@ -217,7 +217,7 @@ def describe_chart(months, chart="Display"):
     
     elif chart == "OLV":
         
-        line = "You are being describe a line and bar chart combo. The line is VCR (video completion rate) over a certain amount of months. The bars are the total spend of a certain amount of months. Here is the description: "
+        line = "You are being describe a line and bar chart combo. The line is VCR (video completion rate) over a certain amount of months. The bars are the total spend of a certain amount of months."
 
 
         for index, row in months.iterrows():
