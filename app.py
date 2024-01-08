@@ -17,8 +17,8 @@ if uploaded_file is not None:
     client_name = st.text_input("Client Name:", "Delta Dental")
     industry_type = st.text_input("Industry Type:", "dental insurance plans")
 
-    start_date = '2023-11-01'
-    end_date = '2023-11-30'
+    start_date = '2023-12-01'
+    end_date = '2023-12-31'
     
     # Data manipulations
     create_report = st.checkbox("Create report?")
